@@ -7,7 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.BiFunction;
 
 
@@ -16,7 +17,7 @@ import coinmaterial.coinmaterial.Hash.Hashmapper;
 
 /**
  * Implements CoinMaterial wallet command
- * Usage:        /wallet
+ * Usage:        /CoinMaterial wallet
  * Requirements: none
  */
 public class WalletCommand extends AbstractCommand {
@@ -54,40 +55,41 @@ public class WalletCommand extends AbstractCommand {
     	}
     	
         if (args.length == 0) {
-            sender.sendMessage("Введите колличество " + ChatColor.BOLD + "" + ChatColor.GOLD + "Арабских лигатур Джаллаялалоуху" + ChatColor.RESET + ", которое хотите вывести.");
+            sender.sendMessage(ChatColor.BOLD + "Введите колличество Арабских лигатур Джаллаялалоуху, которое хотите вывести.");
             return;
         }
         
         if (isNumber(args[0]) == true) {
             // Deposit value provided as number
             if (enoughCoins(sender, Double.parseDouble(args[0]))) {
-				// Player has enough coins to deposit
+				        // Player has enough coins to deposit
                 if(Bukkit.getPlayer(sender.getName()).getInventory().firstEmpty() != -1){
-					// Player has any empty slots
+					          // Player has any empty slots
+					          
+					          // Put in inventory, calculate what does not fit
+					          Integer didntFit = 0;
+					          HashMap<Integer, ItemStack> didntFitHashmap = Bukkit.getPlayer(sender.getName()).getInventory().addItem(new ItemStack(Material.EMERALD, Integer.valueOf(args[0])));
+					          for(ItemStack stack : didntFitHashmap.values())
+					          	didntFit += stack.getAmount();
+					          
+					          // Send emeralds to inventory, remove from wallet, save wallet
+					          BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;
+					          Hashmapper.playerCoin.put(Bukkit.getPlayer(sender.getName()).getName(), Hashmapper.playerCoin.merge(Bukkit.getPlayer(sender.getName()).getName(), Double.valueOf(args[0]) - Double.valueOf(didntFit), bFuncSub));
+	          
+					          Hashmapper.SaveCoin();
+					          
+					          // Message the player
+					          sender.sendMessage("Вы получили " + ChatColor.GREEN + args[0] + pluralize(" смарагд", Double.parseDouble(args[0]) - Double.valueOf(didntFit)) + ChatColor.RESET + " по курсу 1:1 с " + ChatColor.GOLD + "ﷻ");
 					
-					// Put in inventory, calculate what does not fit
-					Integer didntFit = 0;
-					HashMap<Integer, ItemStack> didntFitHashmap = Bukkit.getPlayer(sender.getName()).getInventory().addItem(new ItemStack(Material.EMERALD, Integer.valueOf(args[0])));
-					for(ItemStack stack : didntFitHashmap.values())
-						didntFit += stack.getAmount();
-					
-					// Send emeralds to inventory, remove from wallet, save wallet
-					BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;
-					Hashmapper.playerCoin.put(Bukkit.getPlayer(sender.getName()).getName(), Hashmapper.playerCoin.merge(Bukkit.getPlayer(sender.getName()).getName(), Double.valueOf(args[0]) - Double.valueOf(didntFit), bFuncSub));
-	
-					Hashmapper.SaveCoin();
-					
-					// Message the player
-					sender.sendMessage("Вы получили " + ChatColor.GREEN + args[0] + pluralize(" смарагд", Double.parseDouble(args[0]) - Double.valueOf(didntFit)) + ChatColor.RESET + " по курсу 1:1 с " + ChatColor.GOLD + "ﷻ");
-					
-                }else {
+                } else {
                     sender.sendMessage(ChatColor.RED + "Освободите ваш инвентарь");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Вы " + "الوغد" + ", не достаточно лигатур!");
+                sender.sendMessage(ChatColor.BOLD + "У вас не достаточно лигатур, " + "الوغد" + "!");
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Введите корректную сумму вывода числом!");
+            sender.sendMessage(ChatColor.BOLD + "Введите корректную сумму вывода числом!");
+
         }
     }
 }
