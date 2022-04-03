@@ -1,18 +1,15 @@
 package coinmaterial.coinmaterial.command;
 
-import jdk.internal.loader.BuiltinClassLoader;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.function.BiFunction;
-import java.util.function.DoubleToLongFunction;
 
-import org.apache.commons.lang.math.NumberUtils;
 
 import coinmaterial.coinmaterial.Hash.Hashmapper;
 
@@ -35,7 +32,7 @@ public class WalletCommand extends AbstractCommand {
     }
 
     public String pluralize(String pluralizable, Double amount) {
-        // pluralize method - return pluralized pluralizable string according to amount in russian
+        // pluralize method - return pluralized pluralizable string according to amount in Russian
         Integer mod10 = amount.intValue() % 10;
         Integer mod100 = amount.intValue() % 100;
 
@@ -51,23 +48,28 @@ public class WalletCommand extends AbstractCommand {
     @Override
     public void execute(CommandSender sender, String label, String[] args) {
         // Overridden execute method - implements wallet command
+    	if (!(sender instanceof Player)) {
+    		sender.sendMessage("Only players are able to use this plugin!");
+    		return;
+    	}
+    	
         if (args.length == 0) {
             sender.sendMessage("Введите колличество " + ChatColor.BOLD + "" + ChatColor.GOLD + "Арабских лигатур Джаллаялалоуху" + ChatColor.RESET + ", которое хотите вывести.");
             return;
         }
-
+        
         if (isNumber(args[0]) == true) {
-            // Deposit value proveded as number
+            // Deposit value provided as number
             if (enoughCoins(sender, Double.parseDouble(args[0]))) {
 				// Player has enough coins to deposit
                 if(Bukkit.getPlayer(sender.getName()).getInventory().firstEmpty() != -1){
 					// Player has any empty slots
 					
-					// Put in inventory, calculate what didn`t fit
+					// Put in inventory, calculate what does not fit
 					Integer didntFit = 0;
 					HashMap<Integer, ItemStack> didntFitHashmap = Bukkit.getPlayer(sender.getName()).getInventory().addItem(new ItemStack(Material.EMERALD, Integer.valueOf(args[0])));
 					for(ItemStack stack : didntFitHashmap.values())
-						didntFit += stack.amount;
+						didntFit += stack.getAmount();
 					
 					// Send emeralds to inventory, remove from wallet, save wallet
 					BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;

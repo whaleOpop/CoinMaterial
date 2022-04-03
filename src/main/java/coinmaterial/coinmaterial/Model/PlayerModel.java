@@ -2,7 +2,7 @@ package coinmaterial.coinmaterial.Model;
 
 
 /**
- * Implements PlayerModel wallet to serialize via Hashmapper
+ * Implements PlayerModel wallet to serialize
  * Usage:        getNickname, getCoin, setCoin
  * Requirements: none
 */

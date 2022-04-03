@@ -1,7 +1,6 @@
 package coinmaterial.coinmaterial;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -29,7 +28,7 @@ public final class CoinMaterial extends JavaPlugin {
 
     @Override
     public void onEnable() {
-		// Enables plubin - loads coins from json, inits all Commands, registers PickupEvent
+		// Enables plugin - loads coins from .json, initializes all Commands, registers PickupEvent
         Hashmapper.LoadCoin();
         log.info("CoinMaterial Start");
 		
@@ -50,7 +49,7 @@ public final class CoinMaterial extends JavaPlugin {
 
     @Override
     public void onDisable() {
-		//Disables plubin - saves coins to json file
+		//Disables plugin - saves coins to .json file
         Hashmapper.SaveCoin();
     }
 

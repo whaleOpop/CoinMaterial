@@ -13,6 +13,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.project
+.classpath
 
 # External tool builders
 .externalToolBuilders/
@@ -151,7 +153,7 @@ fabric.properties
 # that are supposed to be shared within teams.
 
 .idea/*
-target/
+target/*
 
 !.idea/codeStyles
 !.idea/runConfigurations
