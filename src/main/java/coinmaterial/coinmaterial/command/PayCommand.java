@@ -26,7 +26,7 @@ public class PayCommand extends AbstractCommand {
 	
 	public boolean enoughCoins(CommandSender sender, Double paymentValue){
 		// enoughCoins method - tests if sender user has enough coins in their wallet
-		return paymentValue < Double.parseDouble(String.valueOf(Hashmapper.playerCoin.get(Bukkit.getPlayer(sender.getName()).getName())));
+		return paymentValue <= Double.parseDouble(String.valueOf(Hashmapper.playerCoin.get(Bukkit.getPlayer(sender.getName()).getName())));
 		
 	}
 	
@@ -61,7 +61,7 @@ public class PayCommand extends AbstractCommand {
 						Bukkit.getPlayer(args[1]).playSound(Bukkit.getPlayer(args[1]).getLocation(), Sound.ENTITY_VILLAGER_TRADE, 1.0f, 1.0f);
 						
 						// Transfers the money
-						BiFunction<Double, Double, Double> bFunSub = (oldValue, newValue) -> oldValue - newValue;
+						BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;
 						BiFunction<Double, Double, Double> bFuncAdd = (oldValue, newValue) -> oldValue + newValue;
 						
 						Hashmapper.playerCoin.merge(Bukkit.getPlayer(sender.getName()).getName(), Double.valueOf(args[0]), bFuncSub);
