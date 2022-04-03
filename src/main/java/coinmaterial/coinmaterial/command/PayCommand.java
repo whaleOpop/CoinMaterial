@@ -15,7 +15,7 @@ import coinmaterial.coinmaterial.Hash.Hashmapper;
 
 /**
  * Implements CoinMaterial pay command
- * Usage:        /CoinMaterial pay
+ * Usage:        /pay
  * Requirements: none
 */
 public class PayCommand extends AbstractCommand {
@@ -36,7 +36,7 @@ public class PayCommand extends AbstractCommand {
         label="s";
 		
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.BOLD + "Введите количество Арабских лигатур Джаллаялалоуху, которое хотите перевести игроку.");
+            sender.sendMessage("Введите количество" + ChatColor.BOLD + "" + ChatColor.GOLD + "Арабских лигатур Джаллаялалоуху" + ChatColor.RESET + ",которое хотите перевести игроку.");
             return;
         }
 		
@@ -46,15 +46,18 @@ public class PayCommand extends AbstractCommand {
             if (enoughCoins(sender, Double.parseDouble(args[0]))) {
 				// Player has no less than a payment value coins in wallet
 				
+				Bukkit.getServer().getOnlinePlayers()
+				
+				//TODO:fix only for online players
 				if(args[1] != null) {
-					// Player provided payment receiver username
+					// Player provided payment receiver player who is online
 					
 					if(!args[1].equals(sender.getName())) {
 						// payment Sender is not Receiver
 						
 						// Messages two players about outgoing and ingoing payment
-						sender.sendMessage(ChatColor.BOLD + "Вы перевели игроку " + args[1] + ChatColor.GOLD + "ﷻ");
-						Bukkit.getPlayer(args[1]).sendMessage(ChatColor.BOLD + "Вы получили " +  args[0] + ChatColor.GOLD + "ﷻ");
+						sender.sendMessage("Вы перевели игроку " + ChatColor.BOLD + args[1] + ChatColor.RESET + " " + args[0] + CharColor.GOLD + "ﷻ");
+						Bukkit.getPlayer(args[1]).sendMessage("Вы получили " + args[0] + ChatColor.GOLD + "ﷻ" + ChatColor.RESET + " от " + ChatColor.BOLD + sender.getName());
 						
 						// Plays villager_trade sound to both players
 						Bukkit.getPlayer(sender.getName()).playSound(Bukkit.getPlayer(sender.getName()).getLocation(), Sound.ENTITY_VILLAGER_TRADE, 1.0f, 1.0f);
@@ -69,23 +72,18 @@ public class PayCommand extends AbstractCommand {
 						
 						// Saves state
 						Hashmapper.SaveCoin();
-						return;
 						
 					} else {
-						sender.sendMessage(ChatColor.BOLD + "أنت شخص غبي, зачем самому себе переводить лигатуры?");
-						return;
+						sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Вы " + "أنت شخص غبي" + ", зачем самому себе переводить лигатуры?");
 					}
 				} else {
-					sender.sendMessage(ChatColor.BOLD + "Введите имя игрока на сервере!");
-					return;
+					sender.sendMessage(ChatColor.RED + "Введите имя игрока на сервере!");
 				}
             } else {
-                sender.sendMessage(ChatColor.BOLD + "الوغد, у вас не достаточно лигатур!");
-                return;
+                sender.sendMessage(ChatColor.RED + "Вы " + "الوغد" + ", не достаточно лигатур!");
             }
         } else {
-            sender.sendMessage(ChatColor.BOLD + "Введите корректную сумму перевода числом!");
-            return;
+            sender.sendMessage(ChatColor.RED + "Введите корректную сумму перевода числом!");
         }
     }
 }

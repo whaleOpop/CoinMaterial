@@ -25,11 +25,11 @@ public class EventListener implements Listener {
     public void Pickup(PlayerPickupItemEvent e) {
 		// EventHandler method for player pickup on emeralds
         Material type = e.getItem().getItemStack().getType();
-        Integer ammount = e.getItem().getItemStack().getAmount();
-        Hashmapper coinsaveload = null;
+		
         switch (type) {
             case EMERALD: {
-                BiFunction<Double, Double, Double> bFuncSum = (oldValue, newValue) -> oldValue + newValue;
+				Integer ammount = e.getItem().getItemStack().getAmount();
+				
                 if (ammount > 0) {
 					// Send a message, play a sound
                     e.getPlayer().sendMessage(ChatColor.BOLD + "Вы получили " + ammount + ChatColor.GOLD + "ﷻ");
@@ -40,6 +40,8 @@ public class EventListener implements Listener {
                     e.getItem().remove();
 					
 					// Save wallet to json
+					Hashmapper coinsaveload = null;
+					BiFunction<Double, Double, Double> bFuncSum = (oldValue, newValue) -> oldValue + newValue;
                     Hashmapper.playerCoin.put(e.getPlayer().getName(), Hashmapper.playerCoin.merge(e.getPlayer().getName(), Double.valueOf(e.getItem().getItemStack().getAmount()), bFuncSum));
                     coinsaveload.SaveCoin();
                 }
