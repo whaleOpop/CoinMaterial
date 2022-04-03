@@ -46,6 +46,8 @@ public class PayCommand extends AbstractCommand {
             if (enoughCoins(sender, Double.parseDouble(args[0]))) {
 				// Player has no less than a payment value coins in wallet
 				
+				Bukkit.getServer().getOnlinePlayers()
+				
 				//TODO:fix only for online players
 				if(args[1] != null) {
 					// Player provided payment receiver player who is online
