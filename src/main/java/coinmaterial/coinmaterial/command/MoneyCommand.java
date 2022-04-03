@@ -9,7 +9,7 @@ import coinmaterial.coinmaterial.Hash.Hashmapper;
 
 /**
  * Implements CoinMaterial money command (get balance)
- * Usage:        /CoinMaterial money
+ * Usage:        /money
  * Requirements: none
 */
 public class MoneyCommand extends AbstractCommand {
@@ -21,6 +21,6 @@ public class MoneyCommand extends AbstractCommand {
     @Override
     public void execute(CommandSender sender, String label, String[] args) {
 		// Overridden execute method - messages balance info to sender
-        sender.sendMessage(ChatColor.BOLD + "Ваш баланс " + Hashmapper.playerCoin.get(sender.getName()) + ChatColor.GOLD + "ﷻ");
+        sender.sendMessage(ChatColor.BOLD + "Ваш баланс: " + Hashmapper.playerCoin.get(sender.getName()).intValue() + ChatColor.GOLD + "ﷻ");
     }
 }
