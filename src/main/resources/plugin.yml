@@ -4,15 +4,15 @@ main: coinmaterial.coinmaterial.CoinMaterial
 api-version: 1.13
 commands:
   CoinMaterial:
-    description: Перезагрузка плагина
-    permission: CoinMaterial.reload
+    description: Перезагрзка плагина
+    permission: <plugin name>.CoinMaterial
     usage: /coinmaterial reload
   money:
-    description: Узнать баланс
+    description: Узнать баланс счёта
     usage: /money
   wallet:
-    description: Получить деньги со счёта
+    description: Получить свои деньги наличкой
     usage: /wallet [count]
   pay:
     description: Перевод денег игроку
-    usage: /pay [nickname] [count]
+    usage: /pay [nickname][count]

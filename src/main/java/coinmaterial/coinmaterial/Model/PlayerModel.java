@@ -7,21 +7,21 @@ package coinmaterial.coinmaterial.Model;
  * Requirements: none
 */
 public class PlayerModel {
-    private String nickname;
+    private String nikcname;
     private Integer coin;
 
-    public PlayerModel(String nickname, Integer coin) {
-        this.nickname = nickname;
+    public PlayerModel(String nikcname, Integer coin) {
+        this.nikcname = nikcname;
         this.coin = coin;
     }
     public PlayerModel(){}
 
-    public String getNickname() {
-        return nickname;
+    public String getNikcname() {
+        return nikcname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNikcname(String nikcname) {
+        this.nikcname = nikcname;
     }
 
     public Integer getCoin() {
