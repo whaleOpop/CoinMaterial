@@ -1,5 +1,11 @@
 package coinmaterial.coinmaterial.Model;
 
+
+/**
+ * Implements PlayerModel wallet to serialize via Hashmapper
+ * Usage:        getNickname, getCoin, setCoin
+ * Requirements: none
+*/
 public class PlayerModel {
     private String nikcname;
     private Integer coin;
@@ -8,9 +14,7 @@ public class PlayerModel {
         this.nikcname = nikcname;
         this.coin = coin;
     }
-    public PlayerModel(){
-
-    }
+    public PlayerModel(){}
 
     public String getNikcname() {
         return nikcname;
