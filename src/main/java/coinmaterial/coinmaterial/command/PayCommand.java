@@ -32,7 +32,7 @@ public class PayCommand extends AbstractCommand {
     public void execute(CommandSender sender, String label, String[] args) {
 		// Overridden execute method - implements pay command
     	if (!(sender instanceof Player)) {
-    		sender.sendMessage("Only players are able to use this plugin!");
+    		sender.sendMessage("Only players are able to use this command!");
     		return;
     	}
     	
@@ -47,7 +47,6 @@ public class PayCommand extends AbstractCommand {
             if (enoughCoins(sender, Double.parseDouble(args[0]))) {
 				// Player has no less than a payment value coins in wallet
 				
-				//TODO:fix only for online players
 				if(args[1] != null) {
 					// Player provided payment receiver player who is online
 					

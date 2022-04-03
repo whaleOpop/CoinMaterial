@@ -22,7 +22,7 @@ public class MoneyCommand extends AbstractCommand {
     public void execute(CommandSender sender, String label, String[] args) {
 		// Overridden execute method - messages balance info to sender
     	if (!(sender instanceof Player)) {
-    		sender.sendMessage("Only players are able to use this plugin!");
+    		sender.sendMessage("Only players are able to use this command!");
     		return;
     	}
     	
