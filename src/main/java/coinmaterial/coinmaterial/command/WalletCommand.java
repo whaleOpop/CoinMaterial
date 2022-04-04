@@ -27,8 +27,7 @@ public class WalletCommand extends AbstractCommand {
 
     public boolean enoughCoins(CommandSender sender, Double paymentValue) {
         // enoughCoins method - tests if sender user has enough coins in their wallet
-        return paymentValue <= Double.parseDouble(String.valueOf(Hashmapper.playerCoin.get(Bukkit.getPlayer(sender.getName()).getName())));
-
+        return paymentValue <= Hashmapper.getPlayerCoin(Bukkit.getPlayer(sender.getName()).getName());
     }
 
     public String pluralize(String pluralizable, Double amount) {
@@ -78,8 +77,7 @@ public class WalletCommand extends AbstractCommand {
                     Hashmapper.SaveCoin();
 
                     // Message the player
-                    sender.sendMessage("Вы получили " + ChatColor.GREEN + (Double.parseDouble(args[0])-Double.valueOf(didntFit)) + pluralize(" смарагд", Double.parseDouble(args[0]) - Double.valueOf(didntFit)) + ChatColor.RESET + " по курсу 1:1 с " + ChatColor.GOLD + "ﷻ");
-
+                    sender.sendMessage("Вы получили " + ChatColor.GREEN + (Double.parseDouble(args[0]) - Double.valueOf(didntFit)) + pluralize(" смарагд", Double.parseDouble(args[0]) - Double.valueOf(didntFit)) + ChatColor.RESET + " по курсу 1:1 с " + ChatColor.GOLD + "ﷻ");
                 } else {
                     sender.sendMessage(ChatColor.RED + "Освободите ваш инвентарь");
                 }

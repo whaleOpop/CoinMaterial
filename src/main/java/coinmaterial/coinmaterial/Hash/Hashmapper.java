@@ -18,7 +18,20 @@ public class Hashmapper {
 	
     static Gson gson = new Gson();
     public static HashMap<String, Double> playerCoin = new HashMap<>();
-	
+
+    public static boolean playerExists(String name){
+        return playerCoin.get(name) != null;
+    }
+
+    public static Double getPlayerCoin(String name){
+        if(playerExists(name)) {
+            return playerCoin.get(name);
+        } else {
+            playerCoin.put(name, 0.0);
+            return 0.0;
+        }
+    }
+
     public static void LoadCoin() {
 		// Loads wallet data playerCoin from .json file
         try {

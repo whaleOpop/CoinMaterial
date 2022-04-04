@@ -24,7 +24,7 @@ public class PayCommand extends AbstractCommand {
 
     public boolean enoughCoins(CommandSender sender, Double paymentValue) {
         // enoughCoins method - tests if sender user has enough coins in their wallet
-        return paymentValue <= Double.parseDouble(String.valueOf(Hashmapper.playerCoin.get(Bukkit.getPlayer(sender.getName()).getName())));
+        return paymentValue <= Hashmapper.getPlayerCoin(Bukkit.getPlayer(sender.getName()).getName());
 
     }
 

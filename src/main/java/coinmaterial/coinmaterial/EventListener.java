@@ -45,6 +45,7 @@ public class EventListener implements Listener {
 
                 //TODO: static to not static method plug mb?
                 coinsaveload.SaveCoin();
+
             }
         }
     }

@@ -26,6 +26,6 @@ public class MoneyCommand extends AbstractCommand {
             return;
         }
 
-        sender.sendMessage(ChatColor.BOLD + "Ваш баланс: " + Hashmapper.playerCoin.get(sender.getName()).intValue() + ChatColor.GOLD + "ﷻ");
+        sender.sendMessage(ChatColor.BOLD + "Ваш баланс: " + Hashmapper.getPlayerCoin(sender.getName()).intValue() + ChatColor.GOLD + "ﷻ");
     }
 }
