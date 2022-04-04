@@ -26,7 +26,7 @@ public class CoinMaterialCommand extends AbstractCommand {
     public void execute(CommandSender sender, String label, String[] args) {
         // Overridden execute method - handles plugin reload command
         if (args.length == 0) {
-            sender.sendMessage("Reload plugin: /CoinMaterial reload");
+            sender.sendMessage("Reload plugin: /coinmaterial reload");
             return;
         }
 
@@ -35,6 +35,7 @@ public class CoinMaterialCommand extends AbstractCommand {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission required to reload plugin!");
                 return;
             }
+            
             CoinMaterial.getInstance().reloadConfig();
             sender.sendMessage(ChatColor.GREEN + "CoinMaterial Reloaded");
             return;
@@ -45,7 +46,7 @@ public class CoinMaterialCommand extends AbstractCommand {
 
     @Override
     public List<String> complete(CommandSender sender, String[] args) {
-        // Overridden complete method - returns reload as only avialiable command
+        // Overridden complete method - returns reload as only available command
         if (args.length == 1)
             return Lists.newArrayList("reload");
         return Lists.newArrayList();
