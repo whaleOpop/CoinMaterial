@@ -17,46 +17,45 @@ import coinmaterial.coinmaterial.command.WalletCommand;
  * Implements CoinMaterial plugin
  * Usage:        add coinmaterial.coinmaterial package
  * Requirements: org.bukkit, com.google.gson
-*/
+ */
 public final class CoinMaterial extends JavaPlugin {
 
     public static PlayerModel plmodel = new PlayerModel();
-	
+
     Logger log = getLogger();
     private static CoinMaterial instance;
 
 
     @Override
     public void onEnable() {
-		// Enables plugin - loads coins from .json, initializes all Commands, registers PickupEvent
+        // Enables plugin - loads coins from .json, initializes all Commands, registers PickupEvent
         Hashmapper.LoadCoin();
         log.info("CoinMaterial Start");
-		
-        instance=this;
-		
+
+        instance = this;
+
         new CoinMaterialCommand();
         new MoneyCommand();
         new WalletCommand();
         new PayCommand();
-		
+
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
     }
 
-    public static CoinMaterial getInstance(){
-		//Simple Singleton implementation
+    public static CoinMaterial getInstance() {
+        //Simple Singleton implementation
         return instance;
     }
 
     @Override
     public void onDisable() {
-		//Disables plugin - saves coins to .json file
+        //Disables plugin - saves coins to .json file
         Hashmapper.SaveCoin();
     }
 
 /** Helpful links (bukkit events, rubukkit links)
-
  * http://rubukkit.org/threads/spisok-bukkit-events.125435/
  * http://www.rubukkit.org/threads/pomosch-novichkam-i-tem-kto-malo-pisal-plaginy-lifehacki.54085/#post-714498
 
-*/
+ */
 }
