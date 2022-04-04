@@ -94,7 +94,7 @@ public class PayCommand extends AbstractCommand {
                         sender.sendMessage(ChatColor.RED + "Введите имя игрока на сервере!");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.BOLD + "الوغد, у вас не достаточно лигатур!");
+                    sender.sendMessage(ChatColor.BOLD + "У вас не достаточно лигатур!"+ "الوغد");
                 }
             } else {
                 sender.sendMessage(ChatColor.BOLD + "" + ChatColor.RED + "Партия осуждать попытки обман плагин! "

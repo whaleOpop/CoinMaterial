@@ -26,7 +26,7 @@ public final class CoinMaterial extends JavaPlugin {
 
         // Load wallet data
         Hashmapper.LoadCoin();
-
+        saveDefaultConfig();
         // Singleton
         instance = this;
 

@@ -1,0 +1,20 @@
+messages:
+#  General lang
+  isNotCorrectNum: "Введите корректную сумму вывода числом!"
+  isNotEnoughMoney: "У вас не достаточно лигатур,"
+#  Wallet Command
+
+  isNullNumWallet:  "Партия выдать вам 0 смарагдь! "
+  isPlayerInvFull: "Освободите ваш инвентарь"
+  isWalletGood: "Вы получили {kolvo} {coin} по курсу 1:1 c"
+# Pay Command
+  isNullNumPay: "Партия осуждать попытки обман плагин! "
+  isNullPlayerName: "Введите имя игрока на сервере!"
+  transferMyself: "Вы {arab} , зачем самому себе переводить лигатуры?"
+  isNotHaveWallet: "У данного пользователя нет кошелька."
+  senderMessege: "Вы перевели игроку {nickname}"
+  receiverMessege: "Вы получили {coin} от"
+# Money Command
+  moneyInfo: "Ваш баланс: "
+
+  itemCoinMaterial:

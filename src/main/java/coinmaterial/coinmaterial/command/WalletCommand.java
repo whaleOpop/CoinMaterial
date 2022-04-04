@@ -1,5 +1,6 @@
 package coinmaterial.coinmaterial.command;
 
+import coinmaterial.coinmaterial.CoinMaterial;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
@@ -20,7 +21,10 @@ public class WalletCommand extends AbstractCommand {
         // Simple constructor with super support
         super("wallet");
     }
-
+    public String configRead(String paramert){
+        paramert=CoinMaterial.getInstance().getConfig().getString("messages."+paramert);
+        return paramert;
+    }
     public boolean enoughCoins(CommandSender sender, Double paymentValue) {
         // enoughCoins method - tests if sender user has enough coins in their wallet
         return paymentValue <= Hashmapper.getPlayerCoin(sender.getName());
@@ -85,21 +89,22 @@ public class WalletCommand extends AbstractCommand {
                         Hashmapper.SaveCoin();
 
                         // Message the player
-                        sender.sendMessage(
-                                "Вы получили " + ChatColor.GREEN + canDeposit + pluralize(" смарагд", canDeposit)
-                                        + ChatColor.RESET + " по курсу 1:1 с " + ChatColor.GOLD + "ﷻ");
+                        String messgerPlayer=configRead("isWalletGood");
+                        messgerPlayer.replace("{kolvo}",ChatColor.GREEN +canDeposit.toString());
+                        messgerPlayer.replace("{coin}",ChatColor.GREEN +pluralize(" смарагд",canDeposit));
+                        sender.sendMessage(messgerPlayer+ ChatColor.GOLD + "ﷻ");
                     } else {
-                        sender.sendMessage(ChatColor.RED + "Освободите ваш инвентарь");
+                        sender.sendMessage(ChatColor.RED + configRead("isPlayerInvFull"));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "У вас не достаточно лигатур, " + "الوغد" + "!");
+                    sender.sendMessage(ChatColor.RED + configRead("isNotEnoughMoney") + "الوغد" + "!");
                 }
             } else {
                 sender.sendMessage(
-                        ChatColor.RED + "" + ChatColor.BOLD + "Партия выдать вам 0 смарагдь! " + "المال الكبير" + "!");
+                        ChatColor.RED + "" + ChatColor.BOLD + configRead("isNullNumWallet") + "المال الكبير" + "!");
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Введите корректную сумму вывода числом!");
+            sender.sendMessage(ChatColor.RED + configRead("isNotCorrectNum"));
 
         }
     }
