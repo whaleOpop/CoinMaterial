@@ -24,9 +24,12 @@ public class Hashmapper {
         try {
             FileReader reader = new FileReader("plugins/Coin.json");
             playerCoin = gson.fromJson(reader, HashMap.class);
+            reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
+        } catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     public static void SaveCoin() {
@@ -36,6 +39,7 @@ public class Hashmapper {
 			String json = gson.toJson(playerCoin);
             file.write(json);
             file.flush();
+            file.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

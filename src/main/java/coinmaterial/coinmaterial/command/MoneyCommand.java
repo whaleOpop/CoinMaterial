@@ -1,8 +1,8 @@
 package coinmaterial.coinmaterial.command;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import coinmaterial.coinmaterial.Hash.Hashmapper;
 
@@ -20,7 +20,12 @@ public class MoneyCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandSender sender, String label, String[] args) {
-		// Overridden execute method - messages balance info to sender
-        sender.sendMessage(ChatColor.BOLD + "Ваш баланс " + Hashmapper.playerCoin.get(sender.getName()) + ChatColor.GOLD + "ﷻ");
+	    	// Overridden execute method - messages balance info to sender
+    	  if (!(sender instanceof Player)) {
+    		    sender.sendMessage("Only players are able to use this command!");
+    	    	return;
+    	  }
+    	
+        sender.sendMessage(ChatColor.BOLD + "Ваш баланс: " + Hashmapper.playerCoin.get(sender.getName()).intValue() + ChatColor.GOLD + "ﷻ");
     }
 }
