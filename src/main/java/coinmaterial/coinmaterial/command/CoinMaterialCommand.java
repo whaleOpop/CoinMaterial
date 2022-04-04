@@ -35,11 +35,12 @@ public class CoinMaterialCommand extends AbstractCommand {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission required to reload plugin!");
                 return;
             }
-            
+
             CoinMaterial.getInstance().reloadConfig();
             sender.sendMessage(ChatColor.GREEN + "CoinMaterial Reloaded");
             return;
         }
+
 
         sender.sendMessage(ChatColor.RED + "Unknown command: " + args[0]);
     }

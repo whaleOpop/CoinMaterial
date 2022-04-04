@@ -24,13 +24,13 @@ public class EventListener implements Listener {
         // EventHandler method for player pickup on emeralds
 
         if (e.getEntity() instanceof Player && e.getItem().getItemStack().getType() == Material.EMERALD) {
-        	// Entity picking up item is Player and the item type is Emerald
-        	
+            // Entity picking up item is Player and the item type is Emerald
+
             Integer amount = e.getItem().getItemStack().getAmount();
             if (amount > 0) {
-            	// Temporary save player
-            	Player player = (Player) e.getEntity();
-            	
+                // Temporary save player
+                Player player = (Player) e.getEntity();
+
                 // Send a message, play a sound
                 player.sendMessage(ChatColor.BOLD + "Вы получили " + amount + ChatColor.GOLD + "ﷻ");
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);

@@ -3,7 +3,7 @@ version: ${project.version}
 main: coinmaterial.coinmaterial.CoinMaterial
 api-version: 1.13
 commands:
-  CoinMaterial:
+  coinmaterial reload:
     description: Перезагрузка плагина
     permission: CoinMaterial.reload
     usage: /coinmaterial reload
