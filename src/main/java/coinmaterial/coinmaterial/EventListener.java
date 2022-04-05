@@ -29,23 +29,22 @@ public class EventListener implements Listener {
 			Integer amount = e.getItem().getItemStack().getAmount();
 			if (amount > 0) {
 				// Temporary save player
-				Player player = (Player) e.getEntity();
+				Player player = (Player)e.getEntity();
 
 				// Send a message, play a sound
-				String msg = readConfig("msg", "messagePickup");
+				String msg = ChatColor.BOLD + readConfig("msg", "messagePickup");
 				msg = msg.replace("{amount}", amount.toString());
 				msg = msg.replace("{coinSymbol}", ChatColor.GOLD + readConfig("coin", "coinSymbol") + ChatColor.RESET);
-				player.sendMessage(ChatColor.BOLD + msg);
+				player.sendMessage(msg);
 				player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
 				// Cancel event, destroy item
 				e.setCancelled(true);
 				e.getItem().remove();
 
-				// Save wallet to json
+				// Add to wallet, save wallet
 				BiFunction<Double, Double, Double> bFuncSum = (oldValue, newValue) -> oldValue + newValue;
-				Hashmapper.playerCoin.put(player.getName(),
-						Hashmapper.playerCoin.merge(player.getName(), Double.valueOf(amount), bFuncSum));
+				Hashmapper.performCoinOperation(player.getName(), Double.valueOf(amount), bFuncSum);
 				Hashmapper.SaveCoin();
 			}
 		}

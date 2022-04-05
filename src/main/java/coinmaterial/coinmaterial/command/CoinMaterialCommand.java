@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import coinmaterial.coinmaterial.CoinMaterial;
 
 /**
- * Implements handler for CoinMaterial plugin reload
+ * Implements handler for CoinMaterial plugin config reload
  * Usage:        /coinmaterial reload
  * Requirements: CoinMaterial.reload permission
  */
@@ -25,22 +25,22 @@ public class CoinMaterialCommand extends AbstractCommand {
 	public void execute(CommandSender sender, String label, String[] args) {
 		// Overridden execute method - handles plugin reload command
 		if (args.length == 0) {
-			sender.sendMessage("Reload plugin: /coinmaterial reload");
+			sender.sendMessage("Reload plugin config: /coinmaterial reload");
 			return;
 		}
 
 		if (args[0].equalsIgnoreCase("reload")) {
 			if (!sender.hasPermission("CoinMaterial.reload")) {
-				sender.sendMessage(ChatColor.RED + "You don't have the permission required to reload plugin!");
+				sender.sendMessage(ChatColor.RED + "You don't have the permission required to reload plugin config!" + ChatColor.RESET);
 				return;
 			}
 
 			CoinMaterial.getInstance().reloadConfig();
-			sender.sendMessage(ChatColor.GREEN + "CoinMaterial Reloaded");
+			sender.sendMessage(ChatColor.GREEN + "CoinMaterial config reloaded" + ChatColor.RESET);
 			return;
 		}
 
-		sender.sendMessage(ChatColor.RED + "Unknown command: " + args[0]);
+		sender.sendMessage(ChatColor.RED + "Unknown command: " + args[0] + ChatColor.RESET);
 	}
 
 	@Override

@@ -14,8 +14,10 @@ error:
 msgWallet:
 #  Wallet Command
   promptAdd:           ", которое хотите снять со счёта."
+  allDepositAdd:       " Или введите all, чтобы снять все средства."
   
-  playerInventoryFull: "Освободите ваш инвентарь"
+  playerInventoryFull: "Освободите ваш инвентарь!"
+  notEnoughSlots:      "Снять указанную сумму не получилось - нет места в инвентаре."
   
   nullDeposit:         "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
   

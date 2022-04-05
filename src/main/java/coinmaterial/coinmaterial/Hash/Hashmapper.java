@@ -1,5 +1,6 @@
 package coinmaterial.coinmaterial.Hash;
 
+import com.google.common.collect.Lists;
 import com.google.gson.*;
 
 import java.io.FileNotFoundException;
@@ -7,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Implements Hashmapper to work with player wallets in .json files
@@ -23,6 +26,17 @@ public class Hashmapper {
         // playerCoin HashMap
         return playerCoin.get(name) != null;
     }
+    
+    public static List<String> getAllPlayers() {
+    	// getAllPlayers method - returns list of all players with wallets
+    	List<String> ls = Lists.newArrayList();
+    	
+    	for(String name : playerCoin.keySet()) {
+    		ls.add(name);
+    	}
+    	
+    	return ls;
+    }
 
     public static Double getPlayerCoin(String name) {
         // getPlayerCoin method - handles getting wallet value of Player, if Player with
@@ -33,6 +47,12 @@ public class Hashmapper {
             playerCoin.put(name, 0.0);
             return 0.0;
         }
+    }
+    
+    public static void performCoinOperation(String name, Double amount, BiFunction<Double, Double, Double> bFunc) {
+    	// Performs put and merge operation on playerCoin HashMap with a given bFunction - 'amount' and built-in walletValue as operands
+    	// Warning: SaveCoin() is not called!
+    	Hashmapper.playerCoin.put(name, Hashmapper.playerCoin.merge(name, amount, bFunc));
     }
 
     @SuppressWarnings("unchecked") // Could not do anything to .fromJson to fix Infer Generic Type...
