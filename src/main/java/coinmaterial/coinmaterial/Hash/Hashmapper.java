@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Implements Hashmapper to work with player wallets in .json files Usage:
- * load/save HashMap of user wallets Requirements: com.google.gson
+ * Implements Hashmapper to work with player wallets in .json files
+ * Usage:        load/save HashMap of user wallets
+ * Requirements: com.google.gson
  */
 public class Hashmapper {
 

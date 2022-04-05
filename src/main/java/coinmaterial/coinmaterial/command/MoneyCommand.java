@@ -7,8 +7,9 @@ import org.bukkit.entity.Player;
 import coinmaterial.coinmaterial.Hash.Hashmapper;
 
 /**
- * Implements CoinMaterial money command (get balance) Usage: /CoinMaterial
- * money Requirements: none
+ * Implements CoinMaterial money command (get balance)
+ * Usage:        /money
+ * Requirements: none
  */
 public class MoneyCommand extends AbstractCommand {
     public MoneyCommand() {
@@ -23,8 +24,9 @@ public class MoneyCommand extends AbstractCommand {
             sender.sendMessage("Only players are able to use this command!");
             return;
         }
-
-        sender.sendMessage(ChatColor.BOLD + "Ваш баланс: " + Hashmapper.getPlayerCoin(sender.getName()).intValue()
-                + ChatColor.GOLD + "ﷻ");
+        String msg = ChatColor.BOLD + readConfig("msgMoney", "infoMoney");
+        msg = msg.replace("{amount}", Integer.toString(Hashmapper.getPlayerCoin(sender.getName()).intValue()));
+        msg = msg.replace("{coinSymbol}", ChatColor.GOLD + readConfig("coin", "coinSymbol") + ChatColor.RESET);
+        sender.sendMessage(msg);
     }
 }

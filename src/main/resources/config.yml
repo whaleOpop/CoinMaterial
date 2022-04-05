@@ -1,20 +1,53 @@
-messages:
-#  General lang
-  isNotCorrectNum: "Введите корректную сумму вывода числом!"
-  isNotEnoughMoney: "У вас не достаточно лигатур,"
+msg:
+#  General messages
+  promptInputMoney: "Введите количество Арабских лигатур Джаллаялалоуху"
+  messagePickup:    "Вы получили {amount}{coinSymbol}"
+
+
+error:
+#  General errors
+  incorrectNumber: "Введите корректную сумму натуральным числом!"
+  notEnoughMoney:  "У вас недостаточно лигатур на счету, الوغد!"
+  issuerNotPLayer: "Only players are able to use this command!"
+
+
+msgWallet:
 #  Wallet Command
+  promptAdd:           ", которое хотите снять со счёта."
+  
+  playerInventoryFull: "Освободите ваш инвентарь"
+  
+  nullDeposit:         "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
+  
+  correctDeposit:      "Вы получили {amount} {coinName} по курсу 1:1 c {coinSymbol}"
 
-  isNullNumWallet:  "Партия выдать вам 0 смарагдь! "
-  isPlayerInvFull: "Освободите ваш инвентарь"
-  isWalletGood: "Вы получили {kolvo} {coin} по курсу 1:1 c"
-# Pay Command
-  isNullNumPay: "Партия осуждать попытки обман плагин! "
-  isNullPlayerName: "Введите имя игрока на сервере!"
-  transferMyself: "Вы {arab} , зачем самому себе переводить лигатуры?"
-  isNotHaveWallet: "У данного пользователя нет кошелька."
-  senderMessege: "Вы перевели игроку {nickname}"
-  receiverMessege: "Вы получили {coin} от"
-# Money Command
-  moneyInfo: "Ваш баланс: "
 
-  itemCoinMaterial:
+msgPay:
+#  Pay Command
+  promptAdd:       ", которое хотите перевести игроку."
+  
+  transferToSelf:  "Вы أنت شخص غبي, зачем самому себе переводить лигатуры?"
+  incorrectPlayer: "У данного пользователя нет кошелька."
+  
+  nullTransfer:    "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
+  nullPlayerName:  "Введите имя игрока на сервере!"
+  
+  senderMessage:   "Вы перевели игроку {receiver} {amount}{coinSymbol}"
+  receiverMessage: "Вы получили {amount}{coinSymbol} от игрока {sender}"
+
+
+msgMoney:
+#  Money Command
+  infoMoney: "Ваш баланс: {amount}{coinSymbol}"
+
+
+coin:
+#  Bukkit materials, currency name, symbol
+  COIN_MATERIAL: "DIAMOND"
+  
+  coinName: "диамант"
+  coinSymbol: "ﷻ"
+  
+  pluralizeOne: "ъ"
+  pluralizeTwoFour: "а"
+  pluralizeMany: "ов"

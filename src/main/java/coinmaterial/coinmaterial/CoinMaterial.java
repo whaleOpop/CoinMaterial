@@ -12,7 +12,8 @@ import coinmaterial.coinmaterial.command.PayCommand;
 import coinmaterial.coinmaterial.command.WalletCommand;
 
 /**
- * Implements CoinMaterial plugin Usage: add coinmaterial.coinmaterial package
+ * Implements CoinMaterial plugin
+ * Usage: 		 add coinmaterial.coinmaterial package
  * Requirements: org.bukkit, com.google.gson
  */
 public final class CoinMaterial extends JavaPlugin {
@@ -26,7 +27,10 @@ public final class CoinMaterial extends JavaPlugin {
 
         // Load wallet data
         Hashmapper.LoadCoin();
+        
+        // Save config file
         saveDefaultConfig();
+        
         // Singleton
         instance = this;
 
