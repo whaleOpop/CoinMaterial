@@ -26,11 +26,11 @@ public final class CoinMaterial extends JavaPlugin {
         log.info("CoinMaterial Start");
 
         // Load wallet data
-        Hashmapper.LoadCoin();
+
         
         // Save config file
         saveDefaultConfig();
-        
+        Hashmapper.LoadCoin();
         // Singleton
         instance = this;
 

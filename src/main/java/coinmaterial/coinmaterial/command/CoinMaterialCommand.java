@@ -1,13 +1,16 @@
 package coinmaterial.coinmaterial.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import coinmaterial.coinmaterial.CoinMaterial;
+import org.bukkit.entity.Player;
 
 /**
  * Implements handler for CoinMaterial plugin config reload
@@ -28,6 +31,7 @@ public class CoinMaterialCommand extends AbstractCommand {
 			sender.sendMessage("Reload plugin config: /coinmaterial reload");
 			return;
 		}
+
 
 		if (args[0].equalsIgnoreCase("reload")) {
 			if (!sender.hasPermission("CoinMaterial.reload")) {
