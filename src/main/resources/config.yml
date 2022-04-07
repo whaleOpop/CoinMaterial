@@ -1,55 +1,143 @@
-msg:
-#  General messages
-  promptInputMoney: "Введите количество Арабских лигатур Джаллаялалоуху"
-  messagePickup:    "Вы получили {amount}{coinSymbol}"
-
-
-error:
-#  General errors
-  incorrectNumber: "Введите корректную сумму натуральным числом!"
-  notEnoughMoney:  "У вас недостаточно лигатур на счету, الوغد!"
-  issuerNotPLayer: "Only players are able to use this command!"
-
-
-msgWallet:
-#  Wallet Command
-  promptAdd:           ", которое хотите снять со счёта."
-  allDepositAdd:       " Или введите all, чтобы снять все средства."
+# L10N strings for commands
+localization:
+	# All commands general messages, errors
+	general:
+		# Material name to use when referencing COIN_MATERIAL
+		materialName: "диамант"
+		
+		# materialName string is pluralizable with I17N standart with suffixes for (one of, two-four of, many of Item)
+		# Example
+		# English - one car[], many car[s] => pluralizeOne: "", pluralizeTwoFour: "s", pluralizeMany: "s"
+		# Rusiian - одна машин[а], две машин[ы], семь машин[] => pluralizeOne: "а", pluralizeTwoFour: "ы", pluralizeMany: ""
+		pluralizeOne:     "ъ"
+  		pluralizeTwoFour: "а"
+  		pluralizeMany:    "ов"
+  		
+		# INFO: Player got coins to wallet (from picking up ITEM_MATERIAL or via pay command as receiver)
+		# Placeholders:
+		# {amount}         - the amount of coins added to the coin wallet
+		# {currencySymbol} - the currency symbol of coins set in this config under settings:currency:currencySymbol
+  		messageGotCoins: "Вы получили {amount}{currencySymbol}"
+  		
+  		# ERROR: Command was issued by non-player connection (server, etc.)
+  		issuerNotPLayer: "Only players are able to use this command!"
+  		
+  		# ERROR: Player did not input <amount> argument in a command
+		promptInputAmount: "Введите количество Арабских лигатур Джаллаялалоуху"
+  		
+  		# ERROR: Player input <amount> argument was not positive integer
+  		incorrectAmount: "Введите корректную сумму натуральным числом!"
+  		
+  		# ERROR: Player does not have enough money in their coin wallet
+  		notEnoughMoney:  "У вас недостаточно лигатур на счету, الوغد!"
+  	
+  	
+  	# CoinMaterial config reload strings
+  	configReload:
+  		# INFO: Message the player about coinmaterial config reload
+  		configReloadMsg: "CoinMaterial config reloaded!"
+  		
+  		# ERROR: Player does not have the permission required to reload plugin config
+  		noPermission: "You don't have the permission required to reload plugin config!"
+  	
+  	
+	# Wallet command strings
+	msgWallet:
+		# ERROR: Add a string to promptInputMoney in wallet command
+		promptAdd: ", которое хотите снять со счёта. Или введите all, чтобы снять все средства (только с личного счёта)."
+		
+		# ERROR: Withdrawn amount is null
+		nullWithdraw: "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
+		
+		# ERROR: Player inventory is full
+		playerInventoryFull: "Освободите ваш инвентарь!"
+		
+		# WARNING: Player does not have enough free slots to withdraw given amount from coin wallet
+		notEnoughSlots: "Снять указанную сумму не получилось - нет места в инвентаре."
+		
+		# INFO: Player correctly withdrawn coins from wallet
+		# Placeholders:
+		# {amount}         - the amount of items added to player inventory
+		# {materialName}   - the material localized name set in this config under settings:currency:materialName:
+		# {currencySymbol} - the currency symbol of coins set in this config under settings:currency:currencySymbol
+		correctWithdraw: "Вы получили {amount} {materialName} по курсу 1:1 c {currencySymbol}"
+	
+	
+	# Pay command strings
+	msgPay:
+		# ERROR: Add a string to promptInputMoney in pay command
+ 		promptAdd: ", которое хотите перевести игроку."
   
-  playerInventoryFull: "Освободите ваш инвентарь!"
-  notEnoughSlots:      "Снять указанную сумму не получилось - нет места в инвентаре."
+  		# ERROR: Payment receiver is the player issuing the transfer
+ 	 	transferToSelf: "Вы أنت شخص غبي, зачем самому себе переводить лигатуры?"
+ 	 	
+ 	 	# ERROR: Payment receiver did not open a coin wallet
+  		incorrectPlayer: "У данного пользователя нет кошелька."
+  		
+  		# ERROR: Player did not specify payment receiver name
+  		nullPlayerName: "Введите имя игрока на сервере!"
   
-  nullDeposit:         "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
-  
-  correctDeposit:      "Вы получили {amount} {coinName} по курсу 1:1 c {coinSymbol}"
+  		# ERROR: Payment amount is null
+  		nullTransfer: "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
+  		  		
+  		# INFO: Message to players involved in payment
+  		# Placeholders:
+  		# {sender} and {receiver} - nicknames of players involved in payment
+  		# {amount}                - the amount of coins transferred
+  		# {currencySymbol}        - the currency symbol of coins set in this config under settings:currency:currencySymbol
+  		senderMessage:   "Вы перевели игроку {receiver} {amount}{currencySymbol}"
+  		receiverMessage: "Вы получили {amount}{currencySymbol} от игрока {sender}"
+  	
+  	
+  	# Money command strings
+  	msgMoney:
+  		# INFO: Messages player about his coin wallet balance
+  		# Placeholders:
+  		# {amount}         - the amount of coins transferred
+  		# {currencySymbol} - the currency symbol of coins set in this config under settings:currency:currencySymbol
+ 		infoMoney: "Ваш баланс: {amount}{currencySymbol}"
+ 	
+ 	# Guilded integration strings (general)
+ 	guilded:
+ 		# ERROR: Player issued Guilded command, but Guilded was not integrated with CoinMaterial
+ 		incorrectArgument: "Ошибка, на сервере не установлен плагин Guilded или интеграция с ним не произошла! Попробуйте вызвать команду без guilded."
+ 		
+ 		# ERROR: Guilds coin wallet does not have enough money
+ 		notEnoughMoney: "На счёте гильдии недостаточно лигатур!"
+ 		
+ 		# ERROR: Player is not a member of a guild (or he needs to have role "member" or higher)
+ 		playerNotInGuild: "Данный игрок не состоит в гильдии!"
+ 		
+ 		# ERROR: Player needs to have higher role than "member" ("creator" or "operator") to perform operation
+ 		playerTooLowRole: "У вас недостаточно прав в гильдии!"
+ 	
+ 	# Guilded integration (wallet command)
+ 	guildedWallet:
+ 		# ERROR: Player tried to withdraw coins from guild's wallet with "all" as amount
+ 		withdrawAmountNumberOnly: "Укажите конкретное число лигатур для снятия со счёта гильдии!"
+ 	
+ 	# Guilded integration (pay command)
+ 	guildedPay:
+ 		# ERROR: Player did not specify nickname of player in a guild
+ 		nullPlayerName: "Укажите название игрока в гильдии, куда хотите совершить перевод!"
 
 
-msgPay:
-#  Pay Command
-  promptAdd:       ", которое хотите перевести игроку."
-  
-  transferToSelf:  "Вы أنت شخص غبي, зачем самому себе переводить лигатуры?"
-  incorrectPlayer: "У данного пользователя нет кошелька."
-  
-  nullTransfer:    "Халифа ибн Заид Аль Нахайян осуждает ваши действия, المال الكبير!"
-  nullPlayerName:  "Введите имя игрока на сервере!"
-  
-  senderMessage:   "Вы перевели игроку {receiver} {amount}{coinSymbol}"
-  receiverMessage: "Вы получили {amount}{coinSymbol} от игрока {sender}"
 
+# Plugin settings
+settings:
+	# Plugin settings
+	general:
+		# Integration with other DoubleWhale plugins (such as Guilded - https://github.com/whaleopop/Guilded)
+		# Values: "enabled"/"disabled"
+		integrateDW: "enabled"
 
-msgMoney:
-#  Money Command
-  infoMoney: "Ваш баланс: {amount}{coinSymbol}"
-
-
-coin:
-#  Bukkit materials, currency name, symbol
-  COIN_MATERIAL: "DIAMOND"
-  
-  coinName: "диамант"
-  coinSymbol: "ﷻ"
-  
-  pluralizeOne: "ъ"
-  pluralizeTwoFour: "а"
-  pluralizeMany: "ов"
+	# Coin currency settings, pluralization, ItemMaterial name
+	currency:
+		# Bukkit ItemMaterial name to use when withdrawing from coin wallet
+		# Items with this ItemMaterial will be added to player inventory
+		# Please refer to Bukkit Item Material list at https://dev.bukkit.org/projects/supplies/pages/material-list
+		COIN_MATERIAL: "DIAMOND"
+		
+  		# Currency symbol to use when referencing the amount on coin wallet
+  		currencySymbol: "ﷻ"
+	

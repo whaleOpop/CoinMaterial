@@ -1,16 +1,13 @@
 package coinmaterial.coinmaterial.command;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import coinmaterial.coinmaterial.CoinMaterial;
-import org.bukkit.entity.Player;
 
 /**
  * Implements handler for CoinMaterial plugin config reload
@@ -35,12 +32,16 @@ public class CoinMaterialCommand extends AbstractCommand {
 
 		if (args[0].equalsIgnoreCase("reload")) {
 			if (!sender.hasPermission("CoinMaterial.reload")) {
-				sender.sendMessage(ChatColor.RED + "You don't have the permission required to reload plugin config!" + ChatColor.RESET);
+				sender.sendMessage(ChatColor.RED + getLocal("configReload", "noPermission") + ChatColor.RESET);
 				return;
 			}
 
+			// Actually reload plugin and config
 			CoinMaterial.getInstance().reloadConfig();
-			sender.sendMessage(ChatColor.GREEN + "CoinMaterial config reloaded" + ChatColor.RESET);
+	
+			sender.sendMessage(ChatColor.GREEN + getLocal("configReload", "configReloadMsg") + ChatColor.RESET);
+			CoinMaterial.getInstance().log.info(getLocal("configReload", "configReloadMsg"));
+			
 			return;
 		}
 
@@ -50,7 +51,7 @@ public class CoinMaterialCommand extends AbstractCommand {
 	@Override
 	public List<String> complete(CommandSender sender, String[] args) {
 		// Overridden complete method - returns reload as only available command
-		if (args.length == 1)
+		if(sender.hasPermission("CoinMaterial.reload") && (args.length == 1))
 			return Lists.newArrayList("reload");
 		return Lists.newArrayList();
 	}

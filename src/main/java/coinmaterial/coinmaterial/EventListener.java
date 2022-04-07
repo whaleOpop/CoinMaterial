@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 
 import java.util.function.BiFunction;
 
-import coinmaterial.coinmaterial.Hash.Hashmapper;
+import coinmaterial.coinmaterial.CoinSerializer.CoinSerializer;
 
 /**
  * Implements: EventListener for CoinMaterial plugin
@@ -32,9 +32,9 @@ public class EventListener implements Listener {
 				Player player = (Player)e.getEntity();
 
 				// Send a message, play a sound
-				String msg = ChatColor.BOLD + readConfig("msg", "messagePickup");
+				String msg = ChatColor.BOLD + getLocal("general", "messageGotCoins");
 				msg = msg.replace("{amount}", amount.toString());
-				msg = msg.replace("{coinSymbol}", ChatColor.GOLD + readConfig("coin", "coinSymbol") + ChatColor.RESET);
+				msg = msg.replace("{coinSymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
 				player.sendMessage(msg);
 				player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
@@ -44,14 +44,24 @@ public class EventListener implements Listener {
 
 				// Add to wallet, save wallet
 				BiFunction<Double, Double, Double> bFuncSum = (oldValue, newValue) -> oldValue + newValue;
-				Hashmapper.performCoinOperation(player.getName(), Double.valueOf(amount), bFuncSum);
-				Hashmapper.SaveCoin();
+				CoinSerializer.performCoinOperation(player.getName(), Double.valueOf(amount), bFuncSum);
+				CoinSerializer.SaveCoin();
 			}
 		}
 	}
 
-	public String readConfig(String ns, String key) {
+	private String readConfig(String ns, String key) {
 		// readConfig method - reads value from config for given namespace and key pair
 		return CoinMaterial.getInstance().getConfig().getString(ns + "." + key);
+	}
+	
+	public String getLocal(String commandNS, String localize) {
+		// getLocal method - returns localized string from config.yml under 'localization' namespace
+		return readConfig("localization", commandNS + "." + localize);
+	}
+	
+	public String getSettings(String settingsType, String settingName) {
+		// getSettings method - returns settings values from config.yml under 'settings' namespace
+		return readConfig("settings", settingsType + "." + settingName);
 	}
 }

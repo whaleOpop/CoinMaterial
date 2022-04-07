@@ -9,14 +9,14 @@ Easy to deploy server-wide wallet system for a single common currency.
 * Withdraw coins to inventory as items.
 * Pay other players wallet-to-wallet even when they are offline.
 * L10N support with lines in [config.yml][config_file].
-* Seamless intergration with other DoubleWhale plugins:
+* Seamless integration with other DoubleWhale plugins:
     * [Guilded][guilded_repo] - guild wallets, paid guild creation, maintaining, players accept.
-* Funny arabic memes in russian included.
+* Funny Arabic memes in Russian included.
 
 ## Usage
 ### Plugin commands
 > From [plugin.yml](src/main/resources/plugin.yml):
->> Reload plugin config:<br>
+>> Reload plugin config file:<br>
 >> ```/coinmaterial reload```<br><br>
 >> View wallet balance in coins:<br>
 >> ```/money```<br><br>
@@ -39,10 +39,13 @@ ServerRootDir/
 	...
 </pre>
 The code behind integration scans current directory of CoinMaterial.jar file for other DW plugins.<br>
-Then other plugin relative commands will be avialiable.<br>
+Then other plugin relative commands will be available.<br>
 
-__CoinMaterial Guilded intergration error: read further:__<br>
-In case you have divided your plugins in different directories, you can set ```dwPluginsPath``` in [config.yml][config_file] under the ```integration:```  label with path to your directory, where all DW plugins are located.
+__CoinMaterial Guilded integration error: read further:__ <br>
+CoinMaterial might have not found Guilded .jar file. The main reason this might have happened is because you have Guilded plugin renamed. Please put string "Guilded" (case insensitive) in the name of the .jar file.
+
+__You can choose to disable integrations:__ <br>
+In case you want to disable plugin integrations, set ```integrateDW```  in [config.yml][config_file] under the ```settings:general:```  label with string ```"disabled"```.
 
 ### Supported DoubleWhale plugins
 As for now, the only supported plugin is [Guilded][guilded_repo].
@@ -50,13 +53,13 @@ As for now, the only supported plugin is [Guilded][guilded_repo].
 ### Integration related commands
 > With Guilded:<br>
 >> Transfer ```<amount>```  of coins from wallet to guild's wallet.<br>
->> The guild, which wallet will be referenced is determened via player with given ```<playerName>```  with role ```admin/operator/added```  in that guild .<br>
+>> The guild, which wallet will be referenced is determined via player with given ```<playerName>```  with __creator/operator/member__ role in that guild .<br>
 >> ```/pay guild <amount> <playerName>```<br><br>
 >> Get guild's wallet balance.<br>
->> The referenced guild is the player's guild, if he has ```admin/operator/added``` role in it.<br>
+>> The referenced guild is the player's guild, if he has __creator/operator/member__ role in it.<br>
 >> ```/money guild```<br><br>
 >> Withdraw ```<amount>```  of coins from guild's wallet.<br>
->> Coins will be withdrawed if the player issuing this command has ```admin/operator```  role in that guild.<br>
+>> Coins will be withdrawn if the player issuing this command has __creator/operator__ role in that guild.<br>
 >> ```/wallet guild <amount>```
 
 ## Contribution

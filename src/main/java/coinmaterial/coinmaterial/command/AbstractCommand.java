@@ -59,19 +59,27 @@ public abstract class AbstractCommand implements CommandExecutor, TabCompleter {
 
 	public boolean isNumber(String str) {
 		// isNumber support method - tests if provided str contains number
-		if (str == null || str.isEmpty())
-			return false;
-
-		for (int i = 0; i < str.length(); i++) {
-			if (!Character.isDigit(str.charAt(i)))
-				return false;
+		if (str != null && !str.isEmpty()) {
+			for (int i = 0; i < str.length(); i++) {
+				if (!Character.isDigit(str.charAt(i))) return false;
+			}
+			return true;
 		}
-
 		return true;
 	}
-
-	public String readConfig(String ns, String key) {
+	
+	private String readConfig(String ns, String key) {
 		// readConfig method - reads value from config for given namespace and key pair 
 		return CoinMaterial.getInstance().getConfig().getString(ns + "." + key);
+	}
+	
+	public String getLocal(String commandNS, String localize) {
+		// getLocal method - returns localized string from config.yml under 'localization' namespace
+		return readConfig("localization", commandNS + "." + localize);
+	}
+	
+	public String getSettings(String settingsType, String settingName) {
+		// getSettings method - returns settings values from config.yml under 'settings' namespace
+		return readConfig("settings", settingsType + "." + settingName);
 	}
 }
