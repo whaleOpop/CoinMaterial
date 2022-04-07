@@ -26,7 +26,7 @@ public final class CoinMaterial extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Enables plugin - loads coins from .json, initializes all Commands, registers
+		// Enables plugin - loads coins from .json, initializes all Commands, registers EventListeners
 		log.info("CoinMaterial Start");
 		
 		// Save config file, load coins
