@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import coinmaterial.coinmaterial.CoinMaterial;
+import coinmaterial.coinmaterial.GuildModel;
 import coinmaterial.coinmaterial.CoinSerializer.CoinSerializer;
+import coinmaterial.coinmaterial.GuildSerializer.GuildSerializer;
 
 /**
  * Implements CoinMaterial wallet command
@@ -34,7 +36,7 @@ public class WalletCommand extends AbstractCommand {
         if ((mod10 == 1) && (mod100 != 11)) {
             return pluralizable + getLocal("general", "pluralizeOne");
         } else if ((mod10 >= 2) && (mod10 <= 4) && ((mod100 < 10) || (mod100 >= 20))) {
-            return pluralizable + getLocal("gneral", "pluralizeTwoFour");
+            return pluralizable + getLocal("general", "pluralizeTwoFour");
         }
         return pluralizable + getLocal("general", "pluralizeMany");
     }
@@ -83,7 +85,7 @@ public class WalletCommand extends AbstractCommand {
         player.sendMessage(msgPlayer);
     }
     
-    public void executeForGuild(Player player, Double withdrawAmount) {
+    public void executeForGuild(Player player, String guildName, Double withdrawAmount) {
     	// executeForGuild method - executes wallet command for player guild
     	// Part of Guilded plugin integration
     	
@@ -110,16 +112,12 @@ public class WalletCommand extends AbstractCommand {
 
         } else if (canWithdraw != withdrawAmount.intValue()) {
             // Deposited amount is not the same as inputed amount
-            String msg = ChatColor.BOLD + getLocal("msgWallet", "notEnoughSlots") + ChatColor.RESET;
-            player.sendMessage(msg);
+            player.sendMessage(ChatColor.BOLD + getLocal("msgWallet", "notEnoughSlots") + ChatColor.RESET);
         }
-        
-        // TODO: Get player's guild
-        // TODO: Test player's role in a guild (must be higher than a "member")
         
         // Remove coin from wallet, save
         BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;
-        CoinSerializer.performCoinOperation("!guild_" + player.getName(), Double.valueOf(canWithdraw), bFuncSub);
+        CoinSerializer.performCoinOperation(guildName, Double.valueOf(canWithdraw), bFuncSub);
         CoinSerializer.SaveCoin();
 
         // Message the player
@@ -131,10 +129,8 @@ public class WalletCommand extends AbstractCommand {
     }
     
     @Override
-    public void execute(CommandSender sender, String label, String[] args) {    	
+    public void execute(CommandSender sender, String label, String[] args) {
         // Overridden execute method - implements wallet command
-    	
-    	// TODO: refactor this better, combine more lines before CoinSerializer.performCoinOperation
     	
         if (!(sender instanceof Player)) {
             sender.sendMessage(getLocal("general", "issuerNotPLayer"));
@@ -142,54 +138,66 @@ public class WalletCommand extends AbstractCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.BOLD + getLocal("general", "promptInputAmount") + getLocal("msgWallet", "promptAdd") + ChatColor.RESET);
+        	if (CoinMaterial.guildedInstalled) {
+        		// Suggest amount or guild keyword
+        		sender.sendMessage(ChatColor.BOLD + getLocal("guildedWallet", "promptInputAmount") + ChatColor.RESET);
+        	} else {
+        		// Suggest passing an amount to the command
+        		sender.sendMessage(ChatColor.BOLD + getLocal("general", "promptInputAmount") + getLocal("msgWallet", "promptAdd") + ChatColor.RESET);
+        	}
             return;
         }
         
         if (args[0].equalsIgnoreCase("guild")) {
-        	// Guilded plugin integration support
+        	// Player tries accessing guild's wallet
         	
         	if (CoinMaterial.guildedInstalled) {
-        		// Guild wallet withdrawal
+        		// Guilded plugin integration
         		
-        		if (args.length != 2) {
-        			sender.sendMessage(ChatColor.BOLD + getLocal("general", "promptInputAmount") + getLocal("msgWallet", "promptAdd") + ChatColor.RESET);
-        			return;
-        		}
-        		
-        		if (!(isNumber(args[1]))) {
-        			// Amount is not a number
-        			if (args[1].equalsIgnoreCase("all")) {
-        				// You can`t withdraw "all" from guild`s wallet (security reasons)
-        				sender.sendMessage(ChatColor.RED + getLocal("general", "withdrawAmountNumberOnly") + ChatColor.RESET);
-        				return;
-        			}
-        			sender.sendMessage(ChatColor.RED + getLocal("general", "incorrectAmount") + ChatColor.RESET);
-        			return;
-        		}
-        		
-        		Double withdrawAmount = Double.parseDouble(args[0]);
-                Double guildCoins = CoinSerializer.getGuildCoin(sender.getName());
-        		
-        		if (guildCoins < withdrawAmount) {
-        			// Not enough coins
-        			sender.sendMessage(ChatColor.RED + getLocal("guilded", "notEnoughMoney") + ChatColor.RESET);
-        			return;
-        		}
-        		
-        		// Execute guild wallet command
-        		executeForGuild((Player) sender, withdrawAmount);
-        		return;
-        		
-        	} else {
-        		sender.sendMessage(ChatColor.RED + getLocal("general", "guildedNotIncluded") + ChatColor.RESET);
-        		return;
-        	}
-        } else if ((isNumber(args[0]) && args[0].equalsIgnoreCase("all"))) {
+        		// Testing player's permissions in the guild
+        		String playerName = sender.getName();
+        		GuildModel gm = GuildSerializer.getGuildByPlayername(playerName);
+        		if (gm != null) {
+        			// Found player's guild
+        			
+        			if (gm.testOperatorship(playerName)) {
+        				// Player is operator/creator level role
+        				
+        				if (args.length == 2) {
+                			// Player passed withdraw amount to the command
+        					
+        					if (isNumber(args[1])) {
+        	        			// Amount is number
+        						
+        		        		String guildName = gm.getGuildWalletName();
+        						Double withdrawAmount = Double.parseDouble(args[1]);
+        		                Double guildCoins = CoinSerializer.getCoin(guildName);
+        		                
+        		                if (guildCoins >= withdrawAmount) {
+        		        			// Execute guild wallet command
+        		                	
+        		            		executeForGuild((Player) sender, guildName, withdrawAmount);
+        		        		} else
+        		        			sender.sendMessage(ChatColor.RED + getLocal("guilded", "notEnoughMoney") + ChatColor.RESET);        						
+        	        		} else if (args[1].equalsIgnoreCase("all")) {
+        	        			// Player can not withdraw all from guild`s wallet
+        	        			sender.sendMessage(ChatColor.RED + getLocal("guildedWallet", "withdrawAmountNumberOnly") + ChatColor.RESET);
+        	        		} else 
+        	        			sender.sendMessage(ChatColor.RED + getLocal("general", "incorrectAmount") + ChatColor.RESET);
+        				} else
+                			sender.sendMessage(ChatColor.BOLD + getLocal("general", "promptInputAmount") + getLocal("msgWallet", "promptAdd") + ChatColor.RESET);
+        			} else
+            			sender.sendMessage(ChatColor.BOLD + getLocal("guilded", "playerTooLowRole") + ChatColor.RESET);
+        		} else
+        			sender.sendMessage(ChatColor.BOLD + getLocal("guilded", "playerNotInGuild") + ChatColor.RESET);
+        	} else
+        		sender.sendMessage(ChatColor.RED + getLocal("guilded", "incorrectArgument") + ChatColor.RESET);
+        	
+        } else if (isNumber(args[0]) || args[0].equalsIgnoreCase("all")) {
         	// Simple player wallet withdrawal
         	
             Double withdrawAmount = 0.0;
-            Double playerCoins = CoinSerializer.getPlayerCoin(sender.getName());
+            Double playerCoins = CoinSerializer.getCoin(sender.getName());
             
             if (args[0].equalsIgnoreCase("all")) {
                 // Deposit all coins
@@ -207,11 +215,8 @@ public class WalletCommand extends AbstractCommand {
             
             // Execute player wallet command
             executeForPlayer((Player) sender, withdrawAmount);
-            return;
-        }
-        
-        // Player did not specify withdraw amount as integer/"all" or keyword "guild"
-        sender.sendMessage(ChatColor.RED + getLocal("general", "incorrectAmount") + ChatColor.RESET);
+        } else
+        	sender.sendMessage(ChatColor.RED + getLocal("general", "incorrectAmount") + ChatColor.RESET);
     }
 
     @Override
@@ -223,8 +228,11 @@ public class WalletCommand extends AbstractCommand {
     		if (args.length == 1)
     			return Lists.newArrayList("<amount>", "all", "guild");
     		
+    		
     		if (args.length == 2)
-    			return Lists.newArrayList("<amount>");
+    			if (args[1].equalsIgnoreCase("guild"))
+    				return Lists.newArrayList("<amount>");
+    		
     	} else if (args.length == 1)
     		return Lists.newArrayList("<amount>", "all");
     	

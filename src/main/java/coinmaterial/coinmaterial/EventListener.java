@@ -23,7 +23,7 @@ public class EventListener implements Listener {
 		// EventHandler method for player pickup on emeralds
 
 		if (e.getEntity() instanceof Player
-				&& e.getItem().getItemStack().getType() == Material.getMaterial(readConfig("coin", "COIN_MATERIAL"))) {
+				&& e.getItem().getItemStack().getType() == Material.getMaterial(getSettings("currency", "COIN_MATERIAL"))) {
 			// Entity picking up item is Player and the item type is Emerald
 
 			Integer amount = e.getItem().getItemStack().getAmount();
@@ -34,7 +34,7 @@ public class EventListener implements Listener {
 				// Send a message, play a sound
 				String msg = ChatColor.BOLD + getLocal("general", "messageGotCoins");
 				msg = msg.replace("{amount}", amount.toString());
-				msg = msg.replace("{coinSymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
+				msg = msg.replace("{currencySymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
 				player.sendMessage(msg);
 				player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 

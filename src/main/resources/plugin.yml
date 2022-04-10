@@ -1,10 +1,8 @@
 name: CoinMaterial
 version: ${project.version}
-
 author: DoubleWhale https://github.com/whaleOpop/
 authors: [whaleOpop, TheBrushCoder]
 website: https://github.com/whaleOpop/CoinMaterial
-
 main: coinmaterial.coinmaterial.CoinMaterial
 api-version: 1.13
 commands:
@@ -15,19 +13,19 @@ commands:
   money:
     description: Узнать баланс счёта
     usage: |
-    	/<command> (guild)
-    	Пример: /<command>       - Выведет баланс вашего счёта
-    	Пример: /<command> guild - Выведет баланс счёта вашей гильдии
+      /<command> (guild)
+      Пример: /<command>       - Выведет баланс вашего счёта
+      Пример: /<command> guild - !Требует наличие плагина Guilded! Выведет баланс счёта вашей гильдии
   wallet:
     description: Снять деньги со счёта
     usage: |
-    	/<command> (guild) [count | "all"]
-    	Пример: /<command> 1       - Снимет с вашего счёта 1 единицу валюты в инвентарь
-    	Пример: /<command> all     - Снимет с вашего счёта все деньги в инвентарь (работает только с личными счетами)
-    	Пример: /<command> guild 1 - !Требует наличие плагина Guilded! Снимет со счёта вашей гильдии 1 единицу валюты в инвентарь (необходимо иметь роль создателя или оператора гильдии)
+      /<command> (guild) [count | "all"]
+      Пример: /<command> 1       - Снимет с вашего счёта 1 единицу валюты в инвентарь
+      Пример: /<command> all     - Снимет с вашего счёта все деньги в инвентарь (работает только с личными счетами)
+      Пример: /<command> guild 1 - !Требует наличие плагина Guilded! Снимет со счёта вашей гильдии 1 единицу валюты в инвентарь (необходимо иметь роль создателя или оператора гильдии)
   pay:
     description: Перевод денег игроку
     usage: |
-    	/<command> (guild) [count] [nickname]
-    	Пример: /<command> 1 Notch       - Переведёт игроку Notch 1 единицу валюты с вашего счёта
-    	Пример: /<command> guild 1 Notch - !Требует наличие плагина Guilded! Переведёт 1 единицу валюты с вашего счёта на счёт гильдии с данным игроком
+      /<command> (guild) [count] [nickname]
+      Пример: /<command> 1 Notch       - Переведёт игроку Notch 1 единицу валюты с вашего счёта
+      Пример: /<command> guild 1 Notch - !Требует наличие плагина Guilded! Переведёт 1 единицу валюты с вашего счёта на счёт гильдии с данным игроком

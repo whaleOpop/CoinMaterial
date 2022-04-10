@@ -22,25 +22,16 @@ public class CoinSerializer {
 	static final String filePath = "plugins/DWdatabases/Coin.json";
     static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static HashMap<String, Double> playerCoin = new HashMap<>();
+    public static final String guildPrefix = "!guild_";
 
-    public static boolean walletExists(String name) {
-        // walletExists method - return true if player with given name is found in
-        // playerCoin HashMap as key
-        return playerCoin.get(name) != null;
-    }
     
-    public static List<String> getAllGuilds() {
-    	// getAllGuilds method - returns list of all guilds with wallets
-    	// Part of Guilded Integration
-    	List<String> ls = Lists.newArrayList();
-    	for(String name : playerCoin.keySet()) {
-    		// Get all guilds - exclude all player wallets
-    		if (name.startsWith("!guild_")) {
-    			ls.add(name);
-    		}
-    	}
-    	
-    	return ls;
+    public static boolean walletExists(String name, Boolean isGuild) {
+        // walletExists method - return true if player/guild with given name is found in
+        // playerCoin HashMap as key
+
+    	if (isGuild == null) isGuild = false;
+    	if (isGuild) return playerCoin.get(guildPrefix + name) != null;
+        return playerCoin.get(name) != null;
     }
     
     public static List<String> getAllPlayers() {
@@ -48,7 +39,7 @@ public class CoinSerializer {
     	List<String> ls = Lists.newArrayList();
     	for(String name : playerCoin.keySet()) {
     		// Get all players - exclude all guild wallets (Guilded Integration)
-    		if (!name.startsWith("!guild_")) {
+    		if (!name.startsWith(guildPrefix)) {
     			ls.add(name);
     		}
     	}
@@ -56,23 +47,23 @@ public class CoinSerializer {
     	return ls;
     }
     
-    public static Double getGuildCoin(String name) {
-        // getGuildCoin method - handles getting wallet value of guilds, if guild with
-        // given name doesn`t have a wallet - create one with 0 coins
-    	// Part of Guilded Integration
-    	String guild = "!guild_" + name;
-        if (walletExists(guild)) {
-            return playerCoin.get(guild);
-        } else {
-            playerCoin.put(guild, 0.0);
-            return 0.0;
-        }
+    public static List<String> getAllGuildCreators() {
+    	// getAllGuildCreators method - returns list of all guild creators (i.e. guild wallets)
+    	List<String> ls = Lists.newArrayList();
+    	for(String name : playerCoin.keySet()) {
+    		// Get all guilds - include only guild wallets (Guilded Integration)
+    		if (name.startsWith(guildPrefix)) {
+    			ls.add(name.replace(guildPrefix, ""));
+    		}
+    	}
+    	
+    	return ls;
     }
-
-    public static Double getPlayerCoin(String name) {
+    
+    public static Double getCoin(String name) {
         // getPlayerCoin method - handles getting wallet value of Player, if Player with
         // given name doesn`t have a wallet - create one with 0 coins
-        if (walletExists(name)) {
+        if (walletExists(name, false)) {
             return playerCoin.get(name);
         } else {
             playerCoin.put(name, 0.0);
@@ -85,7 +76,7 @@ public class CoinSerializer {
     	// Warning: SaveCoin() is not called!
     	
     	// Call getPlayerCoin in case somehow player does not have a wallet
-    	CoinSerializer.getPlayerCoin(name);
+    	CoinSerializer.getCoin(name);
     	CoinSerializer.playerCoin.put(name, CoinSerializer.playerCoin.merge(name, amount, bFunc));
     }
 

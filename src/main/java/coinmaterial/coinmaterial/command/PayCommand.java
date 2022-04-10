@@ -30,6 +30,7 @@ public class PayCommand extends AbstractCommand {
 		// executeForPlayer method - executes pay command for player
 		// Part of Guilded plugin integration
 		Player receiver = Bukkit.getPlayerExact(receiverName);
+		String playerName = player.getName();
 
 		// Messages sender and receiver about payment, play villager_trade sound to both
 		String msg = getLocal("msgPay", "senderMessage");
@@ -42,7 +43,7 @@ public class PayCommand extends AbstractCommand {
 		if (receiver != null) {
 			// Payment receiver might be offline, if so - don`t message him
 			msg = getLocal("msgPay", "receiverMessage");
-			msg = msg.replace("{sender}", ChatColor.BOLD + player.getName() + ChatColor.RESET);
+			msg = msg.replace("{sender}", ChatColor.BOLD + playerName + ChatColor.RESET);
 			msg = msg.replace("{amount}", transferAmount.toString());
 			msg = msg.replace("{currencySymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
 			receiver.sendMessage(msg);
@@ -53,7 +54,7 @@ public class PayCommand extends AbstractCommand {
 		BiFunction<Double, Double, Double> bFuncSub = (oldValue, newValue) -> oldValue - newValue;
 		BiFunction<Double, Double, Double> bFuncAdd = (oldValue, newValue) -> oldValue + newValue;
 
-		CoinSerializer.performCoinOperation(player.getName(), transferAmount, bFuncSub);
+		CoinSerializer.performCoinOperation(playerName, transferAmount, bFuncSub);
 		CoinSerializer.performCoinOperation(receiverName, transferAmount, bFuncAdd);
 
 		// Saves state
@@ -65,7 +66,7 @@ public class PayCommand extends AbstractCommand {
 		// Part of Guilded plugin integration
 		
 		// Messages sender about payment, play villager_trade sound
-		String msg = getLocal("msgPay", "senderMessage");
+		String msg = getLocal("guildedPay", "senderMessage");
 		msg = msg.replace("{receiver}", ChatColor.BOLD + guildName + ChatColor.RESET);
 		msg = msg.replace("{amount}", transferAmount.toString());
 		msg = msg.replace("{currencySymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
@@ -111,7 +112,7 @@ public class PayCommand extends AbstractCommand {
 						// Payment amount is  positive integer
 						
 						Double transferAmount = Double.parseDouble(args[1]);
-						Double playerCoins = CoinSerializer.getPlayerCoin(playerName);
+						Double playerCoins = CoinSerializer.getCoin(playerName);
 						if (transferAmount > 0.0) {
 							// Payment is not 0 coins
 							
@@ -120,7 +121,7 @@ public class PayCommand extends AbstractCommand {
 								
 								if (args.length == 3) {
 									// Player specified nickname of player (preferably) in a guild
-									if (CoinSerializer.walletExists("!guild_" + args[2])) {
+									if (CoinSerializer.walletExists(args[2], true)) {
 										// TODO: then test player role in a guild (must higher than "requested")
 										
 										// Execute guild pay command
@@ -143,7 +144,7 @@ public class PayCommand extends AbstractCommand {
 		} else if (isNumber(args[0])) {
 			// Payment value provided is a number
 			Double transferAmount = Double.parseDouble(args[0]);
-			Double playerCoins = CoinSerializer.getPlayerCoin(playerName);
+			Double playerCoins = CoinSerializer.getCoin(playerName);
 
 			if (transferAmount > 0.0) {
 				// Payment value is greater than zero
@@ -157,7 +158,7 @@ public class PayCommand extends AbstractCommand {
 						if (!args[1].equals(playerName)) {
 							// Payment Sender is not Receiver
 
-							if (CoinSerializer.walletExists(args[1])) {
+							if (CoinSerializer.walletExists(args[1], false)) {
 								// Payment Receiver is a Player and has a wallet
 								
 								// Execute player pay command
@@ -183,17 +184,21 @@ public class PayCommand extends AbstractCommand {
 		if (CoinMaterial.guildedInstalled) {
 			// Guilded plugin integration support
 			
-			// TODO: test if empty string is needed
-			if (args.length == 0)
-				return Lists.newArrayList("", "guilded");
+			if (args.length == 1)
+				return Lists.newArrayList("<amount>", "guild");
 			
-			// TODO: get a list of all guild creators
-			if (args.length == 2)
+			if (args.length == 2 && args[0].equalsIgnoreCase("guild"))
+				return CoinSerializer.getAllGuildCreators();
+			
+			return Lists.newArrayList();
+		} else {
+			if (args.length == 1)
+				return Lists.newArrayList("<amount>");
+				
+			if (args.length == 2 && !args[0].equalsIgnoreCase("guild"))
 				return CoinSerializer.getAllPlayers();
 			
-		} else if (args.length == 2)
-			return CoinSerializer.getAllPlayers();
-		
-		return Lists.newArrayList("<amount> <playerName>");
+			return Lists.newArrayList();
+		}
 	}
 }
