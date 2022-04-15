@@ -7,51 +7,59 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import coinmaterial.coinmaterial.CoinMaterial;
-
 /**
- * Implements handler for CoinMaterial plugin config reload
- * Usage:        /coinmaterial reload
- * Requirements: CoinMaterial.reload permission
+ * CoinMaterial command class. Handles reload config command.
+ * 
+ * @author WhaleOpop, BlackWarlow
+ *
  */
 public class CoinMaterialCommand extends AbstractCommand {
-
+	/**
+	 * Simple constructor with super support.
+	 */
 	public CoinMaterialCommand() {
-		// Simple constructor with super support
 		super("coinmaterial");
 	}
 
+	/**
+	 * Command execute method. Implements reload config command.
+	 * 
+	 * @param sender Command issuer
+	 * @param label  Command alias
+	 * @param args   Command arguments
+	 */
 	@Override
 	public void execute(CommandSender sender, String label, String[] args) {
-		// Overridden execute method - handles plugin reload command
 		if (args.length == 0) {
 			sender.sendMessage("Reload plugin config: /coinmaterial reload");
 			return;
 		}
 
-
 		if (args[0].equalsIgnoreCase("reload")) {
 			if (!sender.hasPermission("CoinMaterial.reload")) {
-				sender.sendMessage(ChatColor.RED + getLocal("configReload", "noPermission") + ChatColor.RESET);
+				sender.sendMessage(colorize(ChatColor.RED, getLocal("configReload", "noPermission")));
 				return;
 			}
-
 			// Actually reload plugin and config
-			CoinMaterial.getInstance().reloadConfig();
-	
-			sender.sendMessage(ChatColor.GREEN + getLocal("configReload", "configReloadMsg") + ChatColor.RESET);
-			CoinMaterial.getInstance().log.info(getLocal("configReload", "configReloadMsg"));
-			
+			plugin.reloadConfig();
+
+			sender.sendMessage(colorize(ChatColor.GREEN, getLocal("configReload", "configReloadMsg")));
+			plugin.logger.info(getLocal("configReload", "configReloadMsg"));
+
 			return;
 		}
 
-		sender.sendMessage(ChatColor.RED + "Unknown command: " + args[0] + ChatColor.RESET);
+		sender.sendMessage(colorize(ChatColor.RED, "Unknown command: " + args[0]));
 	}
 
+	/**
+	 * Complete method for command arguments.
+	 * 
+	 * @return ArrayList of available arguments.
+	 */
 	@Override
 	public List<String> complete(CommandSender sender, String[] args) {
-		// Overridden complete method - returns reload as only available command
-		if(sender.hasPermission("CoinMaterial.reload") && (args.length == 1))
+		if (sender.hasPermission("CoinMaterial.reload") && (args.length == 1))
 			return Lists.newArrayList("reload");
 		return Lists.newArrayList();
 	}

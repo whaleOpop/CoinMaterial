@@ -8,103 +8,123 @@ import org.bukkit.entity.Player;
 
 import com.google.common.collect.Lists;
 
-import coinmaterial.coinmaterial.CoinMaterial;
-import coinmaterial.coinmaterial.GuildModel;
-import coinmaterial.coinmaterial.CoinSerializer.CoinSerializer;
-import coinmaterial.coinmaterial.GuildSerializer.GuildSerializer;
+import doublewhaleapi.dwapi.DataModels.GuildModel;
+import doublewhaleapi.dwapi.DataModels.PlayerModel;
 
 /**
- * Implements CoinMaterial money command (get balance)
- * Usage:        /money
- * Requirements: none
+ * MoneyCommand class. Handles money command.
+ * 
+ * @author WhaleOpop, BlackWarlow
+ *
  */
 public class MoneyCommand extends AbstractCommand {
-    public MoneyCommand() {
-        // Simple constructor with super support
-        super("money");
-    }
+	/**
+	 * Simple constructor with super support.
+	 */
+	public MoneyCommand() {
+		super("money");
+	}
 
-    public void executeForPlayer(CommandSender sender) {
-    	// executeForPlayer method - executes pay command for player
-    	// Part of Guilded plugin integration
-    	String msg = ChatColor.BOLD + getLocal("msgMoney", "infoMoney");
-        msg = msg.replace("{amount}", Integer.toString(CoinSerializer.getCoin(sender.getName()).intValue()));
-        msg = msg.replace("{currencySymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
-        sender.sendMessage(msg);
-    }
-    
-    public void executeForGuild(CommandSender sender) {
-    	// executeForGuild method - executes pay command for player guild
-    	// Part of Guilded plugin integration
-    	
-    	// Testing player permissions in guild
-		GuildModel gm = GuildSerializer.getGuildByPlayername(sender.getName());
+	/**
+	 * Execute command for player issuer.
+	 * 
+	 * @param sender Player issuer
+	 */
+	public void executeForPlayer(CommandSender sender) {
+		// Get player wallet
+		sender.sendMessage(colorize(ChatColor.BOLD, getLocal("msgMoney", "infoMoney"))
+				.replace("{amount}", plugin.core.coinStorage.gocPlayerWallet(sender.getName()).getBalance().toString())
+				.replace("{currencySymbol}", colorize(ChatColor.GOLD, getSettings("currency", "currencySymbol"))));
+	}
+
+	/**
+	 * Execute command for guild.
+	 * 
+	 * @param sender Player issuer
+	 */
+	public void executeForGuild(CommandSender sender) {
+		GuildModel gm = plugin.core.guildStorage.getGuildByPlayer(sender.getName());
+
 		if (gm != null) {
 			// If guild exists
-			if (gm.testMembership(sender.getName())) {
+			PlayerModel player = gm.getPlayerByName(sender.getName());
+
+			if (player.testMembership()) {
 				// If issuer is guild member
-				String msg = ChatColor.BOLD + getLocal("guildedMoney", "infoMoney");
-		        msg = msg.replace("{amount}", Integer.toString(CoinSerializer.getCoin(gm.getGuildWalletName()).intValue()));
-		        msg = msg.replace("{currencySymbol}", ChatColor.GOLD + getSettings("currency", "currencySymbol") + ChatColor.RESET);
-		        sender.sendMessage(msg);
+
+				sender.sendMessage(
+						colorize(ChatColor.BOLD, getLocal("guildedMoney", "infoMoney"))
+								.replace("{amount}",
+										plugin.core.coinStorage.getWalletByName(gm.getCreatorName(), true).getBalance()
+												.toString())
+								.replace("{currencySymbol}",
+										colorize(ChatColor.GOLD, getSettings("currency", "currencySymbol"))));
+
+			} else
+				sender.sendMessage(colorize(ChatColor.RED, getLocal("guilded", "playerNotAdded")));
+		} else
+			sender.sendMessage(colorize(ChatColor.RED, getLocal("guilded", "playerNotInGuild")));
+	}
+
+	/**
+	 * Command execute method. Implements money command.
+	 * 
+	 * @param sender Command issuer
+	 * @param label  Command alias
+	 * @param args   Command arguments
+	 */
+	@Override
+	public void execute(CommandSender sender, String label, String[] args) {
+		// Overridden execute method - messages balance info to sender
+		if (!(sender instanceof Player)) {
+			sender.sendMessage(getLocal("general", "issuerNotPLayer"));
+			return;
+		}
+
+		if (args.length == 1) {
+			// Player passed an argument
+
+			if (plugin.guildedInstalled) {
+				// CoinMaterial integration
+
+				if (args[0].equalsIgnoreCase("guild")) {
+					// Argument is a guild string
+
+					// Executing for guild
+					executeForGuild(sender);
+				} else {
+					// Too many arguments for money command
+					sender.sendMessage(colorize(ChatColor.RED, getLocal("general", "tooManyArguments")));
+				}
 			} else {
-				// Player is too low of a level to access in a guild this command
-				sender.sendMessage(ChatColor.RED + getLocal("guilded", "playerNotAdded") + ChatColor.RESET);
+				// Guilded not installed
+				if (args[0].equalsIgnoreCase("guild")) {
+					// Yet player tried to access guild's wallet
+					sender.sendMessage(colorize(ChatColor.RED, getLocal("guilded", "incorrectArgument")));
+				} else {
+					// Too many arguments for money command
+					sender.sendMessage(colorize(ChatColor.RED, getLocal("general", "tooManyArguments")));
+				}
 			}
 		} else {
-			// Player is not in a guild
-			sender.sendMessage(ChatColor.RED + getLocal("guilded", "playerNotInGuild") + ChatColor.RESET);
+			// Player issued a simple money command
+			executeForPlayer(sender);
 		}
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String label, String[] args) {
-        // Overridden execute method - messages balance info to sender
-        if (!(sender instanceof Player)) {
-        	sender.sendMessage(getLocal("general", "issuerNotPLayer"));
-            return;
-        }
-        
-        if (args.length == 1) {
-            // Player passed an argument
-            
-        	if (CoinMaterial.guildedInstalled) {
-        		// CoinMaterial integration
-        		
-        		if (args[0].equalsIgnoreCase("guild")) {
-        			// Argument is a guild string
-        			// Executing for guild
-        			executeForGuild(sender);
-        		} else {
-        			// Too many arguments for money command
-        			sender.sendMessage(ChatColor.RED + getLocal("general", "tooManyArguments") + ChatColor.RESET);
-        		}
-        	} else {
-        		// Guilded not installed
-        		if (args[0].equalsIgnoreCase("guild")) {
-        			// Yet player tried to access guild's wallet
-        			sender.sendMessage(ChatColor.RED + getLocal("guilded", "incorrectArgument") + ChatColor.RESET);
-        		} else {
-        			// Too many arguments for money command
-        			sender.sendMessage(ChatColor.RED + getLocal("general", "tooManyArguments") + ChatColor.RESET);
-        		}
-        	}
-        } else {
-        	// Player issued a simple money command
-        	// Get player wallet
-        	executeForPlayer(sender);
-        }
-    }
-    
-    @Override
-    public List<String> complete(CommandSender sender, String[] args) {
-        // Overridden complete method - returns reload as only available command
-    	
-    	// TODO: test if empty string is needed
-    	// Guilded plugin integration support
-        if ((args.length == 1) && CoinMaterial.guildedInstalled)
-        		return Lists.newArrayList("guild");
-        
-        return Lists.newArrayList();
-    }
+	}
+
+	/**
+	 * Complete method for command arguments.
+	 * 
+	 * @return ArrayList of available arguments.
+	 */
+	@Override
+	public List<String> complete(CommandSender sender, String[] args) {
+		// Overridden complete method - returns reload as only available command
+
+		// Guilded plugin integration support
+		if ((args.length == 1) && plugin.guildedInstalled)
+			return Lists.newArrayList("guild");
+
+		return Lists.newArrayList();
+	}
 }
