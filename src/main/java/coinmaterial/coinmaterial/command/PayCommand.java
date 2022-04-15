@@ -51,7 +51,7 @@ public class PayCommand extends AbstractCommand {
 		}
 
 		Player player = (Player) sender;
-		CoinModel playerWallet = plugin.core.coinStorage.getWalletByName(player.getName(), true);
+		CoinModel playerWallet = plugin.core.coinStorage.getWalletByName(player.getName(), false);
 
 		if (playerWallet == null) {
 			// Player had not opened a wallet

@@ -1,7 +1,7 @@
 package coinmaterial.coinmaterial;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -26,10 +26,12 @@ public final class CoinMaterial extends JavaPlugin {
 	 */
 	private static CoinMaterial instance;
 
+	private PluginManager pluginManager = Bukkit.getPluginManager();
+
 	/**
 	 * Plugin logger.
 	 */
-	public Logger logger = Bukkit.getLogger();
+	public Logger logger = getLogger();
 
 	/**
 	 * Public available DWAPI core and integration settings.
@@ -43,21 +45,21 @@ public final class CoinMaterial extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		logger.info("CoinMaterial Start");
+
 		// Singleton
 		instance = this;
 
-		logger.info("CoinMaterial Start");
-
 		// Get DWAPI core
-		Plugin loadCore = Bukkit.getPluginManager().getPlugin("DWAPI");
-		if (loadCore == null) {
+
+		if (pluginManager.isPluginEnabled("DWAPI")) {
+			logger.info("DWAPI core was successfuly loaded.");
+			core = (DWAPI) pluginManager.getPlugin("DWAPI");
+		} else {
 			logger.severe("CoinMaterial requires DWAPI core plugin to work, please install it!");
-			Bukkit.getPluginManager().disablePlugin(this);
+			pluginManager.disablePlugin(this);
 			return;
 		}
-
-		core = (DWAPI) loadCore;
-		logger.info("coinStorage was successfuly loaded from DWAPI core.");
 
 		// Save config file
 		saveDefaultConfig();

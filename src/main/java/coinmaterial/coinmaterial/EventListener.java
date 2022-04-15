@@ -50,7 +50,7 @@ public class EventListener implements Listener {
 
 				// Adds to coinStorage, saves to .json file
 				CoinSerializer coinStorage = CoinMaterial.getInstance().core.coinStorage;
-				CoinModel wallet = coinStorage.getWalletByName(playerName, false);
+				CoinModel wallet = coinStorage.gocPlayerWallet(playerName);
 				if (wallet == null)
 					coinStorage.createEmptyWallet(playerName, false);
 				wallet.setBalance(wallet.getBalance() + amount);

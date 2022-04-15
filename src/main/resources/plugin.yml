@@ -5,6 +5,7 @@ authors: [whaleOpop, TheBrushCoder]
 website: https://github.com/whaleOpop/CoinMaterial
 main: coinmaterial.coinmaterial.CoinMaterial
 api-version: 1.13
+depend: [DWAPI]
 commands:
   coinmaterial:
     description: Перезагрузка файла настроек плагина
